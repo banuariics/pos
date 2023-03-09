@@ -108,6 +108,76 @@ function get_data_member(){
 					
 }
 
+
+function get_data_promo($org_id){
+	
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_promo&org_id=".$org_id,
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'GET',
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+	
+	
+}
+function get_data_promo_code($org_id){
+	
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_promo_code&org_id=".$org_id,
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'GET',
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+	
+	
+}
+
+function get_data_promo_tebus($org_id){
+	
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_promo_tebus&org_id=".$org_id,
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'GET',
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+	
+	
+}
+
+
 function toBase($num, $b=62) {
   $base='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   $r = $num  % $b ;
@@ -849,6 +919,238 @@ locator_name) VALUES (
 		
 		$json_string = json_encode($data);	
 		echo $json_string;
+	}else if($_GET['act'] == 'sync_promo'){
+		
+		$jsons = get_data_promo($org_id);
+		$arr = json_decode($jsons, true);
+		$jum = count($arr);
+		$s = array();
+		
+		// var_dump( $arr);			
+		
+		if($jum > 0){
+		$truncate = $connec->query("TRUNCATE TABLE pos_mproductdiscount");
+		if($truncate){
+			
+		
+			// echo $jum;
+			$no = 0;
+			
+			foreach($arr as $item) { //foreach element in $arr
+				$amk = $item['ad_morg_key']; //etc
+				$isactived = $item['isactived']; //etc
+				$insertdate = $item['insertdate']; //etc
+				$insertby = $item['insertby']; //etc
+				$discountname = str_replace("'", "\'", $item['discountname']); //etc
+				$discounttype = $item['discounttype']; //etc
+				$sku = $item['sku']; //etc
+				$discount = $item['discount']; //etc
+				$fromdate = $item['fromdate']; //etc
+				$todate = $item['todate']; //etc
+				$typepromo = $item['typepromo']; //etc
+				$maxqty = $item['maxqty']; //etc
+				$ad_mclient_key = $item['ad_mclient_key']; //etc
+					
+					 
+				$s[] = "('".guid()."','".$ad_mclient_key."', '".$amk."', '".$isactived."', '".date("Y-m-d H:i:s")."','".$insertdate."', '".$insertby."', '".$discountname."', '".$discounttype."','".$sku."', '".$discount."', '".$fromdate."', '".$todate."', '".$typepromo."', '".$maxqty."')";	 
+					 
+				
+									
+			}
+			
+			$jum_s = count($s);
+			
+			if($jum_s > 0){
+				$values = implode(", ",$s);
+
+				$ssql = "insert into pos_mproductdiscount (pos_mproductdiscount_key, ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, discounttype, sku, discount, fromdate, todate, typepromo, maxqty) 
+						VALUES ".$values.";";
+
+
+				// echo $ssql;
+				$suc = $connec->query($ssql);
+				
+				
+				if($suc){
+					
+					$json = array('result'=>'1', 'msg'=>'Berhasil sync');
+					$json_string = json_encode($json);	
+					
+				}else{
+					
+					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti');
+					$json_string = json_encode($json);	
+				}
+				
+			}else{
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data rack blm ditemukan');
+				$json_string = json_encode($json);	
+				
+			}
+		}	
+			
+	}else{
+		
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json_string = json_encode($json);	
+		
+	}
+		
+
+	echo $json_string;	
+	
+
+	}else if($_GET['act'] == 'sync_promo_code'){
+		
+	
+		
+		$jsons = get_data_promo_code($org_id);
+		$arr = json_decode($jsons, true);
+		$jum = count($arr);
+		$s = array();
+		if($jum > 0){
+		$truncate = $connec->query("TRUNCATE TABLE pos_mproductdiscountmember");
+		if($truncate){
+			
+		
+			// echo $jum;
+			$no = 0;
+			
+			foreach($arr as $item) { //foreach element in $arr
+				$amk = $item['ad_morg_key']; //etc
+				$isactived = $item['isactived']; //etc
+				$insertdate = $item['insertdate']; //etc
+				$insertby = $item['insertby']; //etc
+				$discountname = str_replace("'", "\'", $item['discountname']); //etc
+				$discounttype = $item['discounttype']; //etc
+				$sku = $item['sku']; //etc
+				$discount = $item['discount']; //etc
+				$fromdate = $item['fromdate']; //etc
+				$todate = $item['todate']; //etc
+				$typepromo = $item['typepromo']; //etc
+				$maxqty = $item['maxqty']; //etc
+				$afterdiscount = $item['afterdiscount']; //etc
+				$ad_mclient_key = $item['ad_mclient_key']; //etc
+					
+					 
+				$s[] = "('".guid()."', '".$ad_mclient_key."','".$amk."', '".$isactived."', '".date("Y-m-d H:i:s")."','".$insertdate."', '".$insertby."', '".$discountname."','".$sku."', '".$afterdiscount."', '".$fromdate."', '".$todate."', '".$maxqty."')";	 
+					 
+				
+									
+			}
+			
+			$jum_s = count($s);
+			
+			if($jum_s > 0){
+				$values = implode(", ",$s);
+
+				$suc = $connec->query("insert into pos_mproductdiscountmember (pos_mproductdiscountmember_key, ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, sku, pricediscount, fromdate, todate, maxqty) 
+						VALUES ".$values.";");
+				
+				
+				if($suc){
+					
+					$json = array('result'=>'1', 'msg'=>'Berhasil sync');
+					$json_string = json_encode($json);	
+					
+				}else{
+					
+					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti');
+					$json_string = json_encode($json);	
+				}
+				
+			}else{
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json_string = json_encode($json);	
+				
+			}
+		}	
+			
+	}else{
+		
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json_string = json_encode($json);	
+		
+	}
+		
+
+	echo $json_string;	
+				
+
+	}else if($_GET['act'] == 'sync_promo_tebus'){
+		
+		
+		
+		$jsons = get_data_promo_tebus($org_id);
+		$arr = json_decode($jsons, true);
+		$jum = count($arr);
+		$s = array();
+		if($jum > 0){
+		$truncate = $connec->query("TRUNCATE TABLE pos_mproductdiscountmurah");
+		if($truncate){
+			
+			// echo $jum;
+			$no = 0;
+			
+			foreach($arr as $item) { //foreach element in $arr
+				$amk = $item['ad_org_id']; //etc
+				$insertdate = $item['insertdate']; //etc
+				$insertby = $item['insertby']; //etc
+				$discountname = str_replace("'", "\'", $item['headername']); //etc
+				$sku = $item['sku']; //etc
+				$pricediscount = $item['afterdiscount']; //etc
+				$fromdate = $item['fromdate']; //etc
+				$todate = $item['todate']; //etc
+				$maxqty = $item['maxqty']; //etc
+					
+					 
+				$s[] = "('".guid()."', 'D089DFFA729F4A22816BD8838AB0813C', '".$amk."', '1', '".$insertdate."', '".date('Y-m-d H:i:s')."', '".$insertby."', '".$discountname."', '".$sku."', '".$pricediscount."', 
+				'".$fromdate."', '".$todate."', '".$maxqty."')";	 
+							
+			}
+			
+			$jum_s = count($s);
+			
+			if($jum_s > 0){
+				$values = implode(", ",$s);
+
+				$ssql = "INSERT INTO pos_mproductdiscountmurah (pos_mproductdiscountmurah_key, ad_mclient_key, ad_morg_key, isactived, insertdate, postdate, insertby, discountname, sku, pricediscount, fromdate, todate, limitamount) VALUES ".$values.";";
+
+				$suc = $connec->query($ssql);
+				
+				
+				echo $ssql;
+				
+				if($suc){
+					
+					$json = array('result'=>'1', 'msg'=>'Berhasil sync');
+					$json_string = json_encode($json);	
+					
+				}else{
+					
+					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti');
+					$json_string = json_encode($json);	
+				}
+				
+			}else{
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json_string = json_encode($json);	
+				
+			}
+		}	
+			
+	}else{
+		
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json_string = json_encode($json);	
+		
+	}
+		
+
+	echo $json_string;	
+	// echo $ssql;	
+				
+
 	}
 	
 }		

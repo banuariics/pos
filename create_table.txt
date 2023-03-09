@@ -1,0 +1,135 @@
+-- idolmart_idmpos.pos_dsales_new definition
+
+CREATE TABLE `pos_dsales_new` (
+  `pos_dsales_key` varchar(32) COLLATE utf8mb4_general_ci NOT NULL PRIMARY KEY,
+  `ad_mclient_key` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ad_morg_key` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `isactived` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `insertdate` timestamp NULL DEFAULT NULL,
+  `insertby` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `postby` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `postdate` timestamp NULL DEFAULT NULL,
+  `pos_medc_key` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pos_dcashierbalance_key` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pos_mbank_key` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ad_muser_key` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `billno` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `billamount` decimal(10,0) DEFAULT NULL,
+  `paymentmethodname` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `membercard` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `cardno` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `approvecode` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `edcno` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `bankname` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `serialno` decimal(10,0) DEFAULT NULL,
+  `billstatus` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `paycashgiven` decimal(10,0) DEFAULT NULL,
+  `paygiven` decimal(10,0) DEFAULT NULL,
+  `printcount` int DEFAULT NULL,
+  `issync` tinyint(1) DEFAULT NULL,
+  `donasiamount` decimal(10,0) DEFAULT NULL,
+  `dpp` decimal(10,0) DEFAULT NULL,
+  `ppn` decimal(10,0) DEFAULT NULL,
+  `billcode` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ispromomurah` tinyint(1) DEFAULT NULL,
+  `point` decimal(10,0) DEFAULT NULL,
+  `pointgive` decimal(10,0) DEFAULT NULL,
+  `membername` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`pos_dsales_key`),
+  KEY `pos_dsales_ad_morg_key_idx` (`ad_morg_key`,`ad_muser_key`,`billcode`,`pos_dcashierbalance_key`,`pos_mbank_key`,`pos_medc_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- idolmart_idmpos.pos_dsalesline definition
+
+CREATE TABLE `pos_dsalesline` (
+  `pos_dsalesline_key` varchar(32) COLLATE utf8mb4_general_ci NOT NULL PRIMARY KEY,
+  `ad_mclient_key` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ad_morg_key` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `isactived` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `insertdate` timestamp NULL DEFAULT NULL,
+  `insertby` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `postby` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `postdate` timestamp NULL DEFAULT NULL,
+  `pos_dsales_key` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `billno` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `seqno` int DEFAULT NULL,
+  `sku` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `qty` decimal(10,0) DEFAULT NULL,
+  `price` decimal(10,0) DEFAULT NULL,
+  `discount` decimal(10,0) DEFAULT NULL,
+  `amount` decimal(10,0) DEFAULT NULL,
+  `issync` tinyint(1) DEFAULT NULL,
+  `discountname` varchar(75) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`pos_dsalesline_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- public.pos_mproductdiscount definition
+
+-- Drop table
+
+-- DROP TABLE public.pos_mproductdiscount;
+
+CREATE TABLE pos_mproductdiscount (
+	pos_mproductdiscount_key varchar(32) NOT NULL PRIMARY KEY,
+	ad_mclient_key varchar(32) NULL,
+	ad_morg_key varchar(32) NULL,
+	isactived varchar(2) NULL,
+	insertdate timestamp NULL,
+	insertby varchar(50) NULL,
+	postby varchar(50) NULL,
+	postdate timestamp NULL,
+	discountname varchar(30) NULL,
+	discounttype int4 NULL,
+	sku varchar(32) NULL,
+	discount numeric NULL,
+	fromdate date NULL,
+	todate date NULL,
+	typepromo varchar(20) NULL,
+	maxqty int4 NULL,
+	headername varchar(100) NULL,
+	CONSTRAINT pos_mproductdiscount_pkey PRIMARY KEY (pos_mproductdiscount_key)
+);
+
+
+
+CREATE TABLE pos_mproductdiscountmember (
+	pos_mproductdiscountmember_key varchar(32) NOT NULL PRIMARY KEY,
+	ad_mclient_key varchar(32) NULL,
+	ad_morg_key varchar(32) NULL,
+	isactived varchar(2) NULL,
+	insertdate timestamp NULL,
+	insertby varchar(50) NULL,
+	postby varchar(50) NULL,
+	postdate timestamp NULL,
+	discountname varchar(30) NULL,
+	sku varchar(32) NULL,
+	pricediscount numeric NULL,
+	fromdate date NULL,
+	todate date NULL,
+	maxqty numeric NULL
+);
+
+
+
+CREATE TABLE pos_mproductdiscountmurah (
+	pos_mproductdiscountmurah_key varchar(32) NOT NULL PRIMARY KEY,
+	ad_mclient_key varchar(32) NULL,
+	ad_morg_key varchar(32) NULL,
+	isactived varchar(2) NULL,
+	insertdate timestamp NULL,
+	insertby varchar(50) NULL,
+	postby varchar(50) NULL,
+	postdate timestamp NULL,
+	discountname varchar(30) NULL,
+	sku varchar(32) NULL,
+	pricediscount numeric NULL,
+	fromdate date NULL,
+	todate date NULL,
+	limitamount numeric NULL,
+	ispromo bool NULL
+);
+
+
+CREATE INDEX pos_mproductdiscount_ad_morg_key_idx ON pos_mproductdiscount (ad_morg_key);
+CREATE INDEX pos_mproductdiscount_sku_idx ON pos_mproductdiscount (sku);

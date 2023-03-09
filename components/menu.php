@@ -1,5 +1,5 @@
 <div class="sidebar">
-	<a href="#home">Penjualan</a>
+	<a href="dashboard.php">Penjualan</a>
 	<a href="sync.php">Sinkronisasi</a>
     <a href="#about">Movement</a>
     <a href="#about">Setting</a>

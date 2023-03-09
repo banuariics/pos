@@ -115,7 +115,7 @@ div.content {
 
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: auto auto auto auto auto auto;
   background-color: #fff;
   padding: 10px;
 }
@@ -178,10 +178,10 @@ div.content {
 <div class="content">
   
   <div class="grid-container">
-  <div class="grid-item"><button style="width: 100%; height: 100px; background-color: #E14D2A; color: #fff; font-size: 30px;cursor: pointer" onclick="syncProduct();">Product</button></div>
-  <div class="grid-item"><button style="width: 100%; height: 100px; background-color: #FD841F; color: #fff; font-size: 30px;cursor: pointer" onclick="syncMember();">Member</button></div>
-  <div class="grid-item">Users</div>  
-  <div class="grid-item">Promo</div>
+  <div class="grid-item"><button style="width: 100%; height: 100px; background-color: #E14D2A; color: #fff; font-size: 25px;cursor: pointer" onclick="syncProduct();">Sync Items</button></div>
+  <div class="grid-item"><button style="width: 100%; height: 100px; background-color: #FD841F; color: #fff; font-size: 25px;cursor: pointer" onclick="syncMember();">Sync Member</button></div>
+  <div class="grid-item"><button style="width: 100%; height: 100px; background-color: #0E8388; color: #fff; font-size: 25px;cursor: pointer" onclick="syncPromo();">Sync Promo</button></div>
+  <div class="grid-item"></div>  
 
 </div>
   
@@ -230,6 +230,72 @@ function syncMember(){
 				$("#overlay").fadeOut(300);
 				alert("Maaf, sync error");
 			}
+		});
+}
+
+function syncPromo(){
+	$("#overlay").fadeIn(300);
+
+		$.ajax({
+		url: "api/action.php?modul=sync&act=sync_promo",
+		type: "POST",
+		beforeSend: function(){
+			$('#notif').html("Proses sync Promo..");
+			
+		},
+		success: function(dataResult){
+			// console.log(dataResult);
+			syncPromoCode();
+			syncPromoTebus();
+		}
+		});
+		
+	
+	
+	
+	
+}
+		
+		
+function syncPromoCode(){
+	$("#overlay").fadeIn(300);
+
+		$.ajax({
+		url: "api/action.php?modul=sync&act=sync_promo_code",
+		type: "POST",
+		beforeSend: function(){
+			$('#notif').html("Proses sync Promo code..");
+			
+		},
+		success: function(dataResult){
+			var dataResult = JSON.parse(dataResult);
+			// location.reload();
+			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+			$("#overlay").fadeOut(300);
+			
+		}
+		});
+}		
+		
+		
+function syncPromoTebus(){
+	$("#overlay").fadeIn(300);
+
+		$.ajax({
+		url: "api/action.php?modul=sync&act=sync_promo_tebus",
+		type: "POST",
+		beforeSend: function(){
+			$('#notif').html("Proses sync Promo code..");
+			
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			location.reload();
+			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+			$("#overlay").fadeOut(300);
+			
+		}
 		});
 }
 
