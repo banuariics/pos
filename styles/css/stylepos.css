@@ -176,3 +176,28 @@ tr.highlighted td {
   text-decoration: none;
   cursor: pointer;
 }
+
+
+.dotgreen {
+  height: 20px;
+  width: 20px;
+  background-color: green;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dotred {
+  height: 20px;
+  width: 20px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.highlight_row {
+background-color: #BBD6B8;
+}
+
+.hidden {
+    display:none;
+}

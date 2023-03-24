@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>CSS Template</title>
+<title>Sync | My POSS</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -178,10 +178,85 @@ div.content {
 <div class="content">
   
   <div class="grid-container">
-  <div class="grid-item"><button style="width: 100%; height: 100px; background-color: #E14D2A; color: #fff; font-size: 25px;cursor: pointer" onclick="syncProduct();">Sync Items</button></div>
-  <div class="grid-item"><button style="width: 100%; height: 100px; background-color: #FD841F; color: #fff; font-size: 25px;cursor: pointer" onclick="syncMember();">Sync Member</button></div>
-  <div class="grid-item"><button style="width: 100%; height: 100px; background-color: #0E8388; color: #fff; font-size: 25px;cursor: pointer" onclick="syncPromo();">Sync Promo</button></div>
-  <div class="grid-item"></div>  
+  <div class="grid-item">
+  <?php 
+  
+	$get_product = $connec->query("select count(*) jum from pos_mproduct");
+	foreach($get_product as $r){
+		
+		echo $r['jum'];
+	}
+  
+  ?>
+  <button style="width: 100%; height: 100px; background-color: #E14D2A; color: #fff; font-size: 25px;cursor: pointer" onclick="syncProduct();">Sync Items</button>
+  </div>
+  <div class="grid-item">
+  <?php 
+  
+	$get_product = $connec->query("select count(*) jum from pos_mmember");
+	foreach($get_product as $r){
+		
+		echo $r['jum'];
+	}
+  
+  ?>
+  <button style="width: 100%; height: 100px; background-color: #FD841F; color: #fff; font-size: 25px;cursor: pointer" onclick="syncMember();">Sync Member</button></div>
+  <div class="grid-item">
+  <?php 
+  
+	$get_product = $connec->query("select count(*) jum from pos_mproductdiscount");
+	foreach($get_product as $r){
+		
+		echo $r['jum'];
+	}
+  
+  ?>
+  
+  <button style="width: 100%; height: 100px; background-color: #0E8388; color: #fff; font-size: 25px;cursor: pointer" onclick="syncPromo();">Sync Promo</button></div>
+  <div class="grid-item">
+   <?php 
+  
+	$get_product = $connec->query("select count(*) jum from pos_medc");
+	foreach($get_product as $r){
+		
+		echo $r['jum'];
+	}
+  
+   ?>
+   &
+   <?php 
+  
+	$get_product = $connec->query("select count(*) jum from pos_mbank");
+	foreach($get_product as $r){
+		
+		echo $r['jum'];
+	}
+  
+  ?>
+  <button style="width: 100%; height: 100px; background-color: #F16767; color: #fff; font-size: 25px;cursor: pointer" onclick="syncEdc();">Sync EDC & Bank</button></div>
+  <div class="grid-item">
+  <?php 
+  
+	$get_product = $connec->query("select count(*) jum from pos_m_category");
+	foreach($get_product as $r){
+		
+		echo $r['jum'];
+	}
+  
+  ?>
+  <button style="width: 100%; height: 100px; background-color: #5D9C59; color: #fff; font-size: 25px;cursor: pointer" onclick="syncCat();">Sync Category</button></div>
+  <div class="grid-item">
+  <?php 
+  
+	$get_product = $connec->query("select count(*) jum from m_pi_users");
+	foreach($get_product as $r){
+		
+		echo $r['jum'];
+	}
+  
+  ?>
+  <button style="width: 100%; height: 100px; background-color: #191825; color: #fff; font-size: 25px;cursor: pointer" onclick="syncUsers();">Sync Users</button></div>
+
 
 </div>
   
@@ -190,6 +265,26 @@ div.content {
 </body>
 <script src="styles/js/jquery-1.11.1.min.js"></script>
 <script>
+function syncUsers(){
+	$.ajax({
+		url: "api/action.php?modul=sync&act=sync_user",
+		type: "GET",
+		beforeSend: function(){
+			 $("#overlay").fadeIn(300);
+		},
+		success: function(dataResult){
+				console.log(dataResult);
+				var dataResult = JSON.parse(dataResult);
+				$("#overlay").fadeOut(300);
+			
+		},error: function (request, status, error) {
+				$("#overlay").fadeOut(300);
+				// alert("Maaf, sync error");
+			}
+	});
+	
+}
+
 
 function syncProduct(){
 		$.ajax({
@@ -207,7 +302,7 @@ function syncProduct(){
 				
 			},error: function (request, status, error) {
 				$("#overlay").fadeOut(300);
-				alert("Maaf, sync error");
+				// alert("Maaf, sync error");
 			}
 		});
 }
@@ -228,7 +323,28 @@ function syncMember(){
 				
 			},error: function (request, status, error) {
 				$("#overlay").fadeOut(300);
-				alert("Maaf, sync error");
+				// alert("Maaf, sync error");
+			}
+		});
+}
+
+function syncEdc(){
+		$.ajax({
+			url: "api/action.php?modul=sync&act=edc",
+			type: "GET",
+			beforeSend: function(){
+				$("#overlay").fadeIn(300);
+			},
+			success: function(dataResult){
+				console.log(dataResult);
+				var dataResult = JSON.parse(dataResult);
+	
+	
+				$("#overlay").fadeOut(300);
+				
+			},error: function (request, status, error) {
+				$("#overlay").fadeOut(300);
+				// alert("Maaf, coba lagi nanti");
 			}
 		});
 }
@@ -298,6 +414,30 @@ function syncPromoTebus(){
 		}
 		});
 }
+
+function syncCat(){
+		$.ajax({
+			url: "api/action.php?modul=sync&act=cat",
+			type: "GET",
+			beforeSend: function(){
+				$("#overlay").fadeIn(300);
+			},
+			success: function(dataResult){
+				console.log(dataResult);
+				var dataResult = JSON.parse(dataResult);
+	
+	
+				$("#overlay").fadeOut(300);
+				
+			},error: function (request, status, error) {
+				$("#overlay").fadeOut(300);
+				alert("Maaf, sync error");
+			}
+		});
+}
+
+
+
 
 </script>
 

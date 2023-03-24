@@ -133,3 +133,10 @@ CREATE TABLE pos_mproductdiscountmurah (
 
 CREATE INDEX pos_mproductdiscount_ad_morg_key_idx ON pos_mproductdiscount (ad_morg_key);
 CREATE INDEX pos_mproductdiscount_sku_idx ON pos_mproductdiscount (sku);
+
+
+alter table m_pi_users
+add accesscode int;
+alter table m_pi_users
+add accessuniq varchar(10) 
+

@@ -1,6 +1,7 @@
 function easyNumberSeparator(config) {
-  // Currency Separator
-  let commaCounter = 10;
+	
+	try{
+		 let commaCounter = 10;
 
   const obj = {
     selector: config.selector || ".number-separator",
@@ -65,4 +66,13 @@ function easyNumberSeparator(config) {
       listenFields()
     }
   });
+		
+	}catch{
+		
+		
+		
+	}
+	
+  // Currency Separator
+ 
 }
